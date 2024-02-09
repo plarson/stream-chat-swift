@@ -8,6 +8,9 @@ extension AVAsset {
     /// The total number of samples in the audio track is calculated using the duration and the sample rate
     /// of the basic audio format description.
     func totalSamplesOfFirstAudioTrack() -> Int {
+#if os(visionOS)
+        return 0
+#else
         guard
             let audioAssetTrack = tracks(withMediaType: .audio).first,
             let descriptions = audioAssetTrack.formatDescriptions as? [CMFormatDescription]
@@ -30,5 +33,6 @@ extension AVAsset {
 
             return Int(sampleRate * totalDuration) * channelCount
         }
+#endif
     }
 }

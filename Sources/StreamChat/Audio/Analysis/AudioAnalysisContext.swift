@@ -34,11 +34,20 @@ struct AudioAnalysisContext {
         from loadedAsset: AVAsset,
         audioURL: URL
     ) {
+#if os(visionOS)
+        self.init(
+            audioURL: audioURL,
+            totalSamples: loadedAsset.totalSamplesOfFirstAudioTrack(),
+            asset: loadedAsset,
+            assetTrack: nil
+        )
+#else
         self.init(
             audioURL: audioURL,
             totalSamples: loadedAsset.totalSamplesOfFirstAudioTrack(),
             asset: loadedAsset,
             assetTrack: loadedAsset.tracks(withMediaType: .audio).first
         )
+#endif
     }
 }
